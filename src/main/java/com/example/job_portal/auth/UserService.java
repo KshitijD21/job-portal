@@ -16,7 +16,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -47,7 +49,7 @@ public class UserService {
         return savedUser;
     }
 
-    public ResponseEntity<ApiResponse<String>> verify(LoginRequest users) {
+    public ResponseEntity<ApiResponse<Map<String, String>>> verify(LoginRequest users) {
         System.out.println("Inside verify");
 
         try {
@@ -62,21 +64,25 @@ public class UserService {
                 if (authenticatedUser != null) {
                     System.out.println("Authenticated user: " + authenticatedUser);
                     String token = jwtService.generateToken(users.getEmail(), authenticatedUser.getId());
+                    String role = authenticatedUser.getRole().name(); // get role from DB
+                    Map<String, String> responseData = new HashMap<>();
+                    responseData.put("token", token);
+                    responseData.put("role", role);
 
-                    ApiResponse<String> response = new ApiResponse<>("success", "Login successful", token, null);
+                    ApiResponse<Map<String, String>> response = new ApiResponse<>("success", "Login successful", responseData, null);
                     System.out.println("response value is "+ response);
                     return ResponseEntity.ok(response);
                 } else {
-                    ApiResponse<String> response = new ApiResponse<>("error", "User not found", null, null);
+                    ApiResponse<Map<String, String>> response = new ApiResponse<>("error", "User not found", null, null);
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
                 }
             } else {
-                ApiResponse<String> response = new ApiResponse<>("error", "Authentication failed", null, null);
+                ApiResponse<Map<String, String>>  response = new ApiResponse<>("error", "Authentication failed", null, null);
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
 
         } catch (Exception e) {
-            ApiResponse<String> response = new ApiResponse<>("error", "Invalid email or password", null, null);
+            ApiResponse<Map<String, String>> response = new ApiResponse<>("error", "Invalid email or password", null, null);
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
