@@ -20,7 +20,6 @@ public class Users {
     private String userName;
     private String email;
     private String password;
-
     private Role role;
     @Override
     public String toString() {
