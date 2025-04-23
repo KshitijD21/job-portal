@@ -1,4 +1,4 @@
-package com.example.job_portal.payloads; // or whatever package you use
+package com.example.job_portal.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
