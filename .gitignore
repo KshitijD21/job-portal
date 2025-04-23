@@ -15,7 +15,6 @@ src/main/resources/credentials.json
 .springBeans
 .sts4-cache
 .DS_Store
-*.properties
 
 ### IntelliJ IDEA ###
 .idea
@@ -38,7 +37,3 @@ build/
 .vscode/
 target/
 .env
-application-dev.properties
-application-prod.properties
-*.properties
-application.properties
